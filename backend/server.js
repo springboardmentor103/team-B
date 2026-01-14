@@ -8,7 +8,6 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import cors from "cors";
 
-
 dotenv.config();
 const app = express();
 
@@ -23,9 +22,8 @@ app.use(express.json());
 
 mongoose
   .connect(process.env.MONGO_URI)
-  .then(() => console.log("✅ MongoDB Connected"))
+  .then(() => console.log("MongoDB Connected"))
   .catch((err) => console.error("❌ DB Error", err));
-
 
 const userSchema = new mongoose.Schema({
   email: {
@@ -47,7 +45,6 @@ const userSchema = new mongoose.Schema({
 
 const User = mongoose.model("User", userSchema);
 
-
 const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
@@ -62,13 +59,9 @@ const generateOTP = () => {
 };
 
 
-
 app.post("/register", async (req, res) => {
   try {
-
     const { email, password } = req.body;
-
-
     if (!email || !password) {
       return res.status(400).json({
         message: "Email and password are required"
@@ -89,10 +82,7 @@ app.post("/register", async (req, res) => {
       });
     }
 
-
     const hashedPassword = await bcrypt.hash(password, 10);
-
-
     const otp = generateOTP();
     const otpExpires = Date.now() + 5 * 60 * 1000; 
 
@@ -107,9 +97,9 @@ app.post("/register", async (req, res) => {
 
     transporter.verify((err, success) => {
   if (err) {
-    console.error("❌ Nodemailer Auth Error:", err);
+    console.error("Nodemailer Auth Error:", err);
   } else {
-    console.log("✅ Nodemailer is ready");
+    console.log("Nodemailer is ready");
   }
 });
 
@@ -140,7 +130,6 @@ app.post("/register", async (req, res) => {
   }
 });
 
-
 app.post("/verify-otp", async (req, res) => {
   const { email, otp } = req.body;
 
@@ -169,7 +158,6 @@ app.post("/verify-otp", async (req, res) => {
     message: "Email verified successfully"
   });
 });
-
 
 app.post("/login", async (req, res) => {
   const { email, password } = req.body;
@@ -200,18 +188,124 @@ app.post("/login", async (req, res) => {
   });
 });
 
-app.get("/test-mail", async (req, res) => {
+// app.get("/test-mail", async (req, res) => {
+//   try {
+//     await transporter.sendMail({
+//       from: process.env.EMAIL_USER,
+//       to: process.env.EMAIL_USER,
+//       subject: "Test Mail",
+//       text: "Nodemailer is working"
+//     });
+//     res.send("Mail sent");
+//   } catch (err) {
+//     console.error("Mail error:", err);
+//     res.status(500).send("Mail failed");
+//   }
+// });
+
+app.post("/forgot-password", async (req, res) => {
   try {
+    const { email } = req.body;
+
+    if (!email) {
+      return res.status(400).json({
+        message: "Email is required"
+      });
+    }
+
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found"
+      });
+    }
+
+    const otp = generateOTP();
+    const otpExpires = Date.now() + 5 * 60 * 1000;
+
+    user.otp = otp;
+    user.otpExpires = otpExpires;
+    await user.save();
+
     await transporter.sendMail({
-      from: process.env.EMAIL_USER,
-      to: process.env.EMAIL_USER,
-      subject: "Test Mail",
-      text: "Nodemailer is working"
+      from: `"Auth App" <${process.env.EMAIL_USER}>`,
+      to: email,
+      subject: "Password Reset OTP",
+      html: `
+        <h2>Password Reset</h2>
+        <p>Your OTP is:</p>
+        <h1>${otp}</h1>
+        <p>This OTP is valid for 5 minutes.</p>
+      `
     });
-    res.send("Mail sent");
-  } catch (err) {
-    console.error("Mail error:", err);
-    res.status(500).send("Mail failed");
+
+    res.json({
+      success: true,
+      message: "Password reset OTP sent to email"
+    });
+
+  } catch (error) {
+    console.error("Forgot Password Error:", error);
+    res.status(500).json({
+      message: "Failed to send OTP"
+    });
+  }
+});
+
+
+app.post("/reset-password", async (req, res) => {
+  try {
+    const { email, otp, newPassword } = req.body;
+
+    if (!email || !otp || !newPassword) {
+      return res.status(400).json({
+        message: "All fields are required"
+      });
+    }
+
+    if (newPassword.length < 6) {
+      return res.status(400).json({
+        message: "Password must be at least 6 characters"
+      });
+    }
+
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found"
+      });
+    }
+
+    if (user.otp !== otp) {
+      return res.status(400).json({
+        message: "Invalid OTP"
+      });
+    }
+
+    if (user.otpExpires < Date.now()) {
+      return res.status(400).json({
+        message: "OTP expired"
+      });
+    }
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    user.password = hashedPassword;
+    user.otp = undefined;
+    user.otpExpires = undefined;
+
+    await user.save();
+
+    res.json({
+      success: true,
+      message: "Password reset successful"
+    });
+
+  } catch (error) {
+    console.error("Reset Password Error:", error);
+    res.status(500).json({
+      message: "Password reset failed"
+    });
   }
 });
 
