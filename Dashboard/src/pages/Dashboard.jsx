@@ -4,6 +4,7 @@ import Sidebar from '../components/Sidebar';
 import Feed from '../components/Feed';
 import Settings from './Settings';
 import AddTask from './AddTask';
+import MyTasks from './MyTasks';
 import { Bell, Search, User, Settings as SettingsIcon, LogOut, Menu } from 'lucide-react';
 import { Popover, Transition } from '@headlessui/react';
 
@@ -12,62 +13,45 @@ const Dashboard = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   return (
-    <div className="dashboard-layout" style={{ background: 'var(--color-bg-gradient)' }}>
+    <div className="flex min-h-screen bg-bg-gradient">
       {/* Mobile Sidebar Overlay */}
       <div 
-        className={`sidebar-overlay ${isSidebarOpen ? 'open' : ''}`}
+        className={`fixed inset-0 z-35 bg-slate-900/50 backdrop-blur-sm transition-opacity duration-300 md:hidden ${
+          isSidebarOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+        }`}
         onClick={() => setIsSidebarOpen(false)}
       />
 
       <Sidebar isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen} />
       
-      <div className="main-content" style={{ display: 'flex', flexDirection: 'column', padding: 0, background: 'transparent' }}>
+      <div className="flex-1 flex flex-col bg-transparent overflow-hidden">
         
         {/* Header */}
-        <header className="dashboard-header">
-          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+        <header className="sticky top-0 z-30 h-[70px] flex items-center justify-between px-8 bg-white/80 backdrop-blur-md border-b border-white/60 transition-all duration-200">
+          <div className="flex items-center gap-4">
             {/* Mobile Menu Button */}
             <button 
-              className="btn-outline"
-              style={{ padding: '0.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center', sm: { display: 'none' } }}
+              className="btn-outline p-2 flex items-center justify-center md:hidden"
               onClick={() => setIsSidebarOpen(true)}
             >
               <Menu size={20} />
             </button>
 
-            <div className="search-bar">
-              <Search size={18} />
+            <div className="flex items-center text-slate-500 bg-gray-100 px-4 py-2.5 rounded-full w-96 border-none transition-all duration-200 focus-within:ring-2 focus-within:ring-primary/20 group">
+              <Search size={18} className="text-slate-400 group-focus-within:text-primary transition-colors" />
               <input 
                 type="text" 
-                placeholder="Search..." 
-                className="search-input"
-                style={{ 
-                  border: 'none', marginLeft: '0.75rem', outline: 'none', 
-                  fontSize: '0.9rem', background: 'transparent' 
-                }} 
+                placeholder="Search tasks..." 
+                className="bg-transparent border-none ml-3 outline-none text-[0.9rem] w-full placeholder:text-slate-400" 
               />
             </div>
           </div>
           
-          <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
+          <div className="flex items-center gap-6">
             <Popover className="relative">
-              <Popover.Button style={{ 
-                position: 'relative', cursor: 'pointer', border: 'none', background: 'none', padding: 0 
-              }}>
-                <div style={{
-                  padding: '8px', borderRadius: '50%', 
-                  backgroundColor: 'var(--color-white)',
-                  boxShadow: 'var(--shadow-sm)',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center'
-                }}>
-                  <Bell size={20} color="var(--color-text-secondary)" />
-                </div>
-                <div style={{ 
-                  position: 'absolute', top: 0, right: 0, 
-                  width: '10px', height: '10px', 
-                  backgroundColor: '#ef4444', borderRadius: '50%',
-                  border: '2px solid white'
-                }} />
+              <Popover.Button className="relative flex items-center justify-center p-2 rounded-full bg-white shadow-sm border-none cursor-pointer hover:bg-gray-50 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-light">
+                <Bell size={20} className="text-slate-500" />
+                <div className="absolute top-1 right-1 w-4 h-4 bg-red-500 rounded-full border-2 border-white flex items-center justify-center text-[10px] font-bold text-white">3</div>
               </Popover.Button>
 
               <Transition
@@ -79,62 +63,41 @@ const Dashboard = () => {
                 leaveFrom="opacity-100 translate-y-0"
                 leaveTo="opacity-0 translate-y-1"
               >
-                <Popover.Panel style={{
-                  position: 'absolute',
-                  right: 0,
-                  marginTop: '0.5rem',
-                  width: '320px',
-                  backgroundColor: 'white',
-                  borderRadius: 'var(--radius)',
-                  boxShadow: 'var(--shadow-lg)',
-                  border: '1px solid var(--color-gray-100)',
-                  overflow: 'hidden',
-                  zIndex: 50
-                }}>
-                   <div style={{ padding: '1rem', borderBottom: '1px solid var(--color-gray-50)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', backgroundColor: 'var(--color-gray-50)' }}>
-                     <h3 style={{ fontWeight: 600, fontSize: '0.95rem' }}>Notifications</h3>
-                     <span style={{ fontSize: '0.75rem', color: 'var(--color-primary)', cursor: 'pointer', fontWeight: 500 }}>Mark all read</span>
+                <Popover.Panel className="absolute right-0 mt-2 w-80 bg-white rounded-radius shadow-lg border border-gray-100 overflow-hidden z-50">
+                   <div className="p-4 bg-gray-50 border-b border-gray-100 flex justify-between items-center">
+                     <h3 className="font-semibold text-[0.95rem]">Notifications</h3>
+                     <span className="text-xs text-primary font-medium cursor-pointer hover:underline">Mark all read</span>
                    </div>
-                   <div style={{ maxHeight: '300px', overflowY: 'auto' }}>
-                      <div style={{ padding: '1rem', borderBottom: '1px solid var(--color-gray-50)', display: 'flex', gap: '0.75rem', cursor: 'pointer' }} className="hover-bg-gray">
-                         <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#ef4444', marginTop: '6px', flexShrink: 0 }}></div>
+                   <div className="max-h-[300px] overflow-y-auto">
+                      <div className="p-4 border-b border-gray-50 flex gap-3 cursor-pointer hover:bg-gray-50 transition-colors">
+                         <div className="w-2 h-2 rounded-full bg-red-500 mt-1.5 flex-shrink-0"></div>
                          <div>
-                            <p style={{ fontSize: '0.9rem', marginBottom: '0.25rem', lineHeight: 1.3 }}>New candidate applied for <b>UX Designer</b></p>
-                            <p style={{ fontSize: '0.75rem', color: 'var(--color-text-secondary)' }}>2 mins ago</p>
+                            <p className="text-[0.9rem] mb-1 leading-snug">New candidate applied for <b>UX Designer</b></p>
+                            <p className="text-xs text-slate-500">2 mins ago</p>
                          </div>
                       </div>
-                       <div style={{ padding: '1rem', borderBottom: '1px solid var(--color-gray-50)', display: 'flex', gap: '0.75rem', cursor: 'pointer' }} className="hover-bg-gray">
-                         <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: 'transparent', marginTop: '6px', flexShrink: 0 }}></div>
+                       <div className="p-4 border-b border-gray-50 flex gap-3 cursor-pointer hover:bg-gray-50 transition-colors">
+                         <div className="w-2 h-2 rounded-full bg-transparent mt-1.5 flex-shrink-0"></div>
                          <div>
-                            <p style={{ fontSize: '0.9rem', marginBottom: '0.25rem', lineHeight: 1.3 }}>Interview scheduled with <b>Sarah Smith</b></p>
-                            <p style={{ fontSize: '0.75rem', color: 'var(--color-text-secondary)' }}>1 hour ago</p>
+                            <p className="text-[0.9rem] mb-1 leading-snug">Interview scheduled with <b>Sarah Smith</b></p>
+                            <p className="text-xs text-slate-500">1 hour ago</p>
                          </div>
                       </div>
                    </div>
-                   <div style={{ padding: '0.75rem', textAlign: 'center', borderTop: '1px solid var(--color-gray-50)' }}>
-                      <button style={{ border: 'none', background: 'none', color: 'var(--color-text-secondary)', fontSize: '0.85rem', cursor: 'pointer', fontWeight: 500 }}>View All Notifications</button>
+                   <div className="p-3 text-center border-t border-gray-100">
+                      <button className="bg-transparent border-none text-slate-500 text-[0.85rem] font-medium cursor-pointer hover:text-primary transition-colors">View All Notifications</button>
                    </div>
                 </Popover.Panel>
               </Transition>
             </Popover>
             
             <Popover className="relative">
-              <Popover.Button style={{ 
-                display: 'flex', alignItems: 'center', gap: '0.75rem', 
-                cursor: 'pointer', border: 'none', background: 'none' 
-              }}>
-                <div className="user-info-text" style={{ textAlign: 'right' }}>
-                  <div style={{ fontSize: '0.9rem', fontWeight: 700, color: 'var(--color-text-main)' }}>Prerna S.</div>
-                  <div style={{ fontSize: '0.75rem', color: 'var(--color-text-secondary)' }}>HR Manager</div>
+              <Popover.Button className="flex items-center gap-3 border-none bg-transparent cursor-pointer group focus:outline-none">
+                <div className="hidden sm:block text-right">
+                  <div className="text-[0.9rem] font-bold text-slate-900 group-hover:text-primary transition-colors">Prerna S.</div>
+                  <div className="text-[0.75rem] text-slate-500 uppercase tracking-wider font-semibold">HR Manager</div>
                 </div>
-                <div style={{ 
-                  width: '42px', height: '42px', 
-                  background: 'var(--color-primary-gradient)',
-                  color: 'white',
-                  borderRadius: '50%', 
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  boxShadow: 'var(--shadow-md)'
-                }}>
+                <div className="w-[42px] h-[42px] bg-primary-gradient text-white rounded-full flex items-center justify-center shadow-md group-hover:scale-105 transition-transform">
                   <User size={20} />
                 </div>
               </Popover.Button>
@@ -148,49 +111,20 @@ const Dashboard = () => {
                 leaveFrom="opacity-100 translate-y-0"
                 leaveTo="opacity-0 translate-y-1"
               >
-                <Popover.Panel style={{
-                  position: 'absolute',
-                  right: 0,
-                  marginTop: '0.5rem',
-                  width: '240px',
-                  backgroundColor: 'white',
-                  borderRadius: 'var(--radius)',
-                  boxShadow: 'var(--shadow-lg)',
-                  border: '1px solid var(--color-gray-100)',
-                  overflow: 'hidden',
-                  zIndex: 50
-                }}>
-                  <div style={{ padding: '1rem', borderBottom: '1px solid var(--color-gray-50)', backgroundColor: 'var(--color-gray-50)' }}>
-                    <p style={{ fontWeight: 600, color: 'var(--color-text-main)' }}>Prerna S.</p>
-                    <p style={{ fontSize: '0.8rem', color: 'var(--color-text-secondary)' }}>prerna@hirehelper.com</p>
+                <Popover.Panel className="absolute right-0 mt-2 w-60 bg-white rounded-radius shadow-lg border border-gray-100 overflow-hidden z-50">
+                  <div className="p-4 bg-gray-50 border-b border-gray-100">
+                    <p className="font-semibold text-slate-900">Prerna S.</p>
+                    <p className="text-[0.8rem] text-slate-500">prerna@hirehelper.com</p>
                   </div>
-                  <div style={{ padding: '0.5rem' }}>
-                    <button style={{ 
-                      width: '100%', textAlign: 'left', padding: '0.75rem 1rem', 
-                      background: 'none', border: 'none', borderRadius: 'var(--radius)',
-                      display: 'flex', alignItems: 'center', gap: '0.75rem',
-                      color: 'var(--color-text-main)', cursor: 'pointer',
-                      fontSize: '0.9rem'
-                    }} className="hover-bg-gray">
+                  <div className="p-2 space-y-1">
+                    <button className="w-full text-left p-3 rounded-radius flex items-center gap-3 text-slate-900 text-[0.9rem] bg-transparent border-none hover:bg-gray-50 transition-colors cursor-pointer">
                       <User size={16} /> Account Info
                     </button>
-                    <button style={{ 
-                      width: '100%', textAlign: 'left', padding: '0.75rem 1rem', 
-                      background: 'none', border: 'none', borderRadius: 'var(--radius)',
-                      display: 'flex', alignItems: 'center', gap: '0.75rem',
-                      color: 'var(--color-text-main)', cursor: 'pointer',
-                      fontSize: '0.9rem'
-                    }} className="hover-bg-gray">
+                    <button className="w-full text-left p-3 rounded-radius flex items-center gap-3 text-slate-900 text-[0.9rem] bg-transparent border-none hover:bg-gray-50 transition-colors cursor-pointer">
                       <SettingsIcon size={16} /> Settings
                     </button>
-                    <div style={{ height: '1px', backgroundColor: 'var(--color-gray-100)', margin: '0.5rem 0' }}></div>
-                    <button style={{ 
-                      width: '100%', textAlign: 'left', padding: '0.75rem 1rem', 
-                      background: 'none', border: 'none', borderRadius: 'var(--radius)',
-                      display: 'flex', alignItems: 'center', gap: '0.75rem',
-                      color: '#ef4444', cursor: 'pointer',
-                      fontSize: '0.9rem'
-                    }} className="hover-bg-gray">
+                    <div className="h-px bg-gray-100 mx-2 my-1" />
+                    <button className="w-full text-left p-3 rounded-radius flex items-center gap-3 text-red-500 text-[0.9rem] bg-transparent border-none hover:bg-red-50 transition-colors cursor-pointer">
                       <LogOut size={16} /> Logout
                     </button>
                   </div>
@@ -201,12 +135,12 @@ const Dashboard = () => {
         </header>
 
         {/* Content Area */}
-        <div style={{ padding: '2rem 5%', flex: 1, overflowY: 'auto' }}>
+        <div className="flex-1 overflow-y-auto px-[5%] py-8">
           <Routes>
             <Route path="feed" element={<Feed />} />
-            <Route path="tasks" element={<div className='card'><h2>My Tasks</h2><p>Task list placeholder</p></div>} />
-            <Route path="requests" element={<div className='card'><h2>Requests</h2><p>Requests list placeholder</p></div>} />
-            <Route path="my-requests" element={<div className='card'><h2>My Requests</h2><p>My requests placeholder</p></div>} />
+            <Route path="tasks" element={<MyTasks />} />
+            <Route path="requests" element={<div className='card'><h2 className="text-xl font-bold mb-2">Requests</h2><p className="text-slate-500">Requests list placeholder</p></div>} />
+            <Route path="my-requests" element={<div className='card'><h2 className="text-xl font-bold mb-2">My Requests</h2><p className="text-slate-500">My requests placeholder</p></div>} />
             <Route path="add-task" element={<AddTask />} />
             <Route path="settings" element={<Settings />} />
             <Route path="/" element={<Navigate to="feed" replace />} />

@@ -14,64 +14,50 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
   ];
 
   return (
-    <div className={`sidebar ${isOpen ? 'open' : ''}`}>
-      <div style={{ padding: '2rem 1.75rem', borderBottom: '1px solid #1e293b', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <h2 style={{ 
-          fontSize: '1.75rem', 
-          fontWeight: '800',
-          letterSpacing: '-0.025em',
-          margin: 0
-        }}>
-          <span style={{ color: '#3b82f6' }}>Hire</span>
-          <span style={{ color: '#ffffff' }}>Helper</span>
+    <div className={`fixed inset-y-0 left-0 z-40 w-[260px] bg-slate-900 border-r border-slate-800 flex flex-col transition-transform duration-300 ease-in-out md:sticky md:translate-x-0 ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+      <div className="p-8 flex items-center justify-between border-b border-slate-800">
+        <h2 className="text-[1.5rem] font-extrabold tracking-tight m-0 flex items-center gap-2">
+          <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
+            <LayoutDashboard size={18} className="text-white" />
+          </div>
+          <span className="text-white">Hire-a-Helper</span>
         </h2>
         
         {/* Mobile Close Button */}
         <button 
           onClick={() => setIsOpen(false)}
-          className="btn-outline mobile-close-btn"
-          style={{ 
-            border: 'none', 
-            color: '#94a3b8', 
-            padding: '4px',
-            background: 'transparent'
-          }}
+          className="p-1 text-slate-400 bg-transparent border-none md:hidden"
         >
           <X size={24} />
         </button>
       </div>
 
-      <nav style={{ flex: 1, padding: '1.5rem 1rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-        {links.map((link) => (
-          <NavLink
-            key={link.path}
-            to={link.path}
-            onClick={() => setIsOpen(false)} // Close sidebar on link click (mobile)
-            className={({ isActive }) => 
-              isActive ? 'nav-link active' : 'nav-link'
-            }
-            style={({ isActive }) => ({
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.875rem',
-              padding: '0.875rem 1rem',
-              borderRadius: 'var(--radius)',
-              color: isActive ? '#ffffff' : '#94a3b8',
-              backgroundColor: isActive ? '#1e293b' : 'transparent',
-              fontWeight: isActive ? 600 : 500,
-              transition: 'all 0.2s ease',
-              borderLeft: isActive ? '4px solid #3b82f6' : '4px solid transparent',
-              boxShadow: isActive ? 'none' : 'none'
-            })}
-          >
-            {({ isActive }) => (
-              <>
-                <link.icon size={22} strokeWidth={isActive ? 2.5 : 2} style={{ color: isActive ? '#3b82f6' : 'currentColor' }} />
-                <span style={{ fontSize: '0.95rem' }}>{link.label}</span>
-              </>
-            )}
-          </NavLink>
-        ))}
+      <nav className="flex-1 p-6 flex flex-col gap-2">
+          {links.map((link) => {
+            const Icon = link.icon;
+            const hasBadge = link.label === 'Requests';
+            
+            return (
+              <NavLink
+                key={link.path}
+                to={link.path}
+                onClick={() => setIsOpen(false)}
+                className={({ isActive }) => 
+                  `flex items-center gap-[0.875rem] p-[0.875rem_1rem] rounded-radius transition-all duration-200 border-l-4 relative group ${
+                    isActive 
+                      ? 'bg-slate-800/80 text-white font-semibold border-primary' 
+                      : 'text-slate-400 font-medium border-transparent hover:bg-slate-800/50 hover:text-slate-200'
+                  }`
+                }
+              >
+                <Icon size={20} className="shrink-0" />
+                <span className="text-[0.95rem] flex-1">{link.label}</span>
+                {hasBadge && (
+                  <span className="bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full">5</span>
+                )}
+              </NavLink>
+            );
+          })}
       </nav>
 
 

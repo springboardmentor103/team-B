@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Search, MapPin, Clock } from 'lucide-react';
+import { Search, MapPin, Clock, CheckCircle2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 
@@ -15,7 +15,7 @@ const Feed = () => {
       fullDate: "Jul 5, 2024 • 2:00 PM - 6:00 PM",
       image: "https://images.unsplash.com/photo-1581578731117-104f2a8d23e9?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
       tag: "moving",
-      tagColor: "tag-blue",
+      tagColor: "bg-blue-100 text-blue-800",
       author: { name: "Sarah Johnson", avatar: "SJ" },
       requestSent: true
     },
@@ -28,7 +28,7 @@ const Feed = () => {
       fullDate: "Jul 6, 2024 • 9:00 AM - 1:00 PM",
       image: "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
       tag: "gardening",
-      tagColor: "tag-green",
+      tagColor: "bg-green-100 text-green-800",
       author: { name: "Robert Wilson", avatar: "RW" },
       requestSent: true
     },
@@ -41,7 +41,7 @@ const Feed = () => {
       fullDate: "Jul 7, 2024 • 8:00 AM - 5:00 PM",
       image: "https://images.unsplash.com/photo-1589939705384-5185137a7f0f?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
       tag: "painting",
-      tagColor: "tag-purple",
+      tagColor: "bg-purple-100 text-purple-800",
       author: { name: "Emily Chen", avatar: "EC" },
       requestSent: true
     },
@@ -54,7 +54,7 @@ const Feed = () => {
       fullDate: "Jul 8, 2024 • 10:00 AM - 3:00 PM",
       image: "https://images.unsplash.com/photo-1497215728101-856f4ea42174?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
       tag: "assembly",
-      tagColor: "tag-orange",
+      tagColor: "bg-orange-100 text-orange-800",
       author: { name: "David Miller", avatar: "DM" },
       requestSent: false
     },
@@ -67,7 +67,7 @@ const Feed = () => {
       fullDate: "Recurring • Mornings",
       image: "https://images.unsplash.com/photo-1548199973-03cce0bbc87b?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
       tag: "pet care",
-      tagColor: "tag-blue",
+      tagColor: "bg-sky-100 text-sky-800",
       author: { name: "Jessica Lee", avatar: "JL" },
       requestSent: false
     },
@@ -80,7 +80,7 @@ const Feed = () => {
       fullDate: "Flexible Schedule",
       image: "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
       tag: "tutoring",
-      tagColor: "tag-purple",
+      tagColor: "bg-indigo-100 text-indigo-800",
       author: { name: "Mark Thompson", avatar: "MT" },
       requestSent: false
     }
@@ -93,25 +93,13 @@ const Feed = () => {
   };
 
   return (
-    <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
-        <div>
-          <h2 style={{ 
-            fontWeight: '800', fontSize: '2rem', 
-            color: 'var(--color-text-main)',
-            letterSpacing: '-0.02em',
-            marginBottom: '0.5rem'
-          }}>Feed</h2>
-          <p style={{ color: 'var(--color-text-secondary)' }}>Find tasks that need help</p>
-        </div>
-        
-        <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-
-
-        </div>
+    <div className="max-w-[1200px] mx-auto">
+      <div className="mb-10">
+        <h2 className="font-extrabold text-4xl text-slate-900 tracking-tight mb-2">Feed</h2>
+        <p className="text-slate-500 text-lg">Explore and join tasks in your community</p>
       </div>
       
-      <div className="feed-grid">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         <AnimatePresence>
           {items.map((item, index) => (
             <motion.div 
@@ -119,106 +107,63 @@ const Feed = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1 }}
-              className="job-card"
-              style={{
-                border: '1px solid var(--color-gray-200)',
-                background: 'var(--color-white)',
-                display: 'flex',
-                flexDirection: 'column',
-              }}
+              className="bg-white rounded-[1.5rem] border border-gray-100 flex flex-col h-full shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 overflow-hidden"
             >
-              <div className="job-card-content" style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', flex: 1 }}>
+              <div className="p-8 flex flex-col flex-1">
                 
                 {/* Header: Tag + Date */}
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-                  <span className={`tag ${item.tagColor}`} style={{ fontSize: '0.75rem', padding: '0.25rem 0.75rem' }}>{item.tag}</span>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', color: 'var(--color-text-secondary)', fontSize: '0.8rem', fontWeight: 500 }}>
-                    <Clock size={14} />
+                <div className="flex justify-between items-center mb-6">
+                  <span className={`px-4 py-1.5 rounded-lg text-[0.7rem] font-black uppercase tracking-wider ${item.tagColor.replace('rounded-full', 'rounded-lg')}`}>
+                    {item.tag}
+                  </span>
+                  <div className="flex items-center gap-1.5 text-slate-400 text-[0.75rem] font-bold uppercase tracking-wide">
+                    <Clock size={14} strokeWidth={2.5} />
                     <span>{item.date}</span>
                   </div>
                 </div>
                 
                 {/* Title */}
-                <h3 style={{ 
-                  fontSize: '1.25rem', 
-                  fontWeight: 700, 
-                  marginBottom: '0.75rem', 
-                  color: 'var(--color-text-main)',
-                  lineHeight: 1.3
-                }}>
+                <h3 className="text-[1.35rem] font-bold mb-4 text-slate-900 leading-[1.2] tracking-tight">
                   {item.title}
                 </h3>
 
                 {/* Description (Truncated) */}
-                <p className="line-clamp-2" style={{ 
-                  fontSize: '0.925rem', 
-                  color: 'var(--color-text-secondary)', 
-                  lineHeight: '1.6', 
-                  marginBottom: '1.25rem',
-                  flex: 1
-                }}>
+                <p className="line-clamp-2 text-[0.95rem] text-slate-500 leading-relaxed mb-6 flex-1">
                   {item.description}
                 </p>
                 
                 {/* Meta: Location */}
-                <div style={{ 
-                  display: 'flex', 
-                  alignItems: 'center', 
-                  gap: '0.5rem', 
-                  marginBottom: '1.5rem', 
-                  color: 'var(--color-text-secondary)', 
-                  fontSize: '0.85rem',
-                  background: 'var(--color-gray-50)',
-                  padding: '0.5rem 0.75rem',
-                  borderRadius: '0.5rem',
-                  width: 'fit-content'
-                }}>
-                  <MapPin size={15} color="var(--color-primary)" />
-                  <span style={{ fontWeight: 500 }}>{item.location}</span>
+                <div className="flex items-center gap-2 mb-8 text-[0.75rem] font-bold uppercase tracking-wider text-slate-500 h-10 border-t border-gray-50 pt-4">
+                  <MapPin size={16} className="text-primary" strokeWidth={2.5} />
+                  <span className="uppercase">{item.location}</span>
                 </div>
                 
                 {/* Footer: Author + Button */}
-                <div style={{ 
-                  display: 'flex', 
-                  justifyContent: 'space-between', 
-                  alignItems: 'center', 
-                  marginTop: 'auto', 
-                  padding: '1.25rem 1.5rem',
-                  margin: '0 -1.5rem -1.5rem -1.5rem',
-                  background: 'linear-gradient(to bottom, #f8fafc, #eff6ff)',
-                  borderTop: '1px solid #e2e8f0' 
-                }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                    <div style={{ 
-                      width: '32px', height: '32px', borderRadius: '50%', 
-                      background: 'var(--color-primary-light)', 
-                      color: 'var(--color-primary)',
-                      display: 'flex', alignItems: 'center', justifyContent: 'center',
-                      fontSize: '0.8rem', fontWeight: 700,
-                      border: '1px solid #e0e7ff'
-                    }}>
+                <div className="flex justify-between items-center mt-auto pt-6 border-t border-gray-100">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-full bg-blue-50 text-primary flex items-center justify-center text-[0.85rem] font-bold border border-blue-100 shadow-sm">
                       {item.author.avatar}
                     </div>
-                    <span style={{ fontSize: '0.9rem', fontWeight: 600, color: 'var(--color-text-main)' }}>{item.author.name}</span>
+                    <div>
+                      <p className="text-[0.65rem] font-bold text-slate-400 uppercase tracking-widest leading-none mb-1">Posted By</p>
+                      <p className="text-[1rem] font-bold text-slate-900 leading-none">{item.author.name}</p>
+                    </div>
                   </div>
                   
                   <button 
-                    className="btn"
                     onClick={() => toggleRequest(item.id)}
-                    style={{ 
-                      backgroundColor: item.requestSent ? 'var(--color-gray-100)' : 'var(--color-primary)', 
-                      color: item.requestSent ? 'var(--color-text-secondary)' : '#ffffff', 
-                      padding: '0.5rem 1rem', 
-                      fontSize: '0.85rem', 
-                      fontWeight: 600,
-                      transition: 'all 0.2s ease',
-                      border: 'none',
-                      borderRadius: 'var(--radius)',
-                      cursor: 'pointer',
-                      boxShadow: item.requestSent ? 'none' : '0 2px 4px rgba(59, 130, 246, 0.25)'
-                    }}
+                    className={`px-4 py-2 text-[0.75rem] font-black uppercase tracking-widest transition-all duration-300 rounded-xl border-none cursor-pointer shadow-md active:scale-95 flex items-center gap-2 ${
+                      item.requestSent 
+                        ? 'bg-green-100 text-green-700 hover:bg-green-200 shadow-none' 
+                        : 'bg-primary text-white hover:bg-primary-dark hover:shadow-lg hover:shadow-primary/25'
+                    }`}
                   >
-                    {item.requestSent ? 'Sent' : 'Connect'}
+                    {item.requestSent ? (
+                      <>
+                        <CheckCircle2 size={14} strokeWidth={3} />
+                        <span>Request Sent</span>
+                      </>
+                    ) : 'Join Task'}
                   </button>
                 </div>
               </div>

@@ -32,13 +32,13 @@ const AddTask = () => {
   };
 
   return (
-    <div className="add-task-container" style={{ maxWidth: '800px', margin: '0 auto' }}>
-      <div style={{ marginBottom: '2rem' }}>
-        <h1 style={{ fontSize: '2rem', fontWeight: 800, color: 'var(--color-text-main)', marginBottom: '0.5rem' }}>Add New Task</h1>
-        <p style={{ color: 'var(--color-text-secondary)' }}>Create a task and find someone to help you</p>
+    <div className="max-w-[800px] mx-auto">
+      <div className="mb-8">
+        <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight mb-2">Add New Task</h1>
+        <p className="text-slate-500">Create a task and find someone to help you</p>
       </div>
 
-      <div className="card">
+      <div className="card space-y-6">
         <div className="input-group">
           <label className="label">Task Title</label>
           <input 
@@ -51,71 +51,65 @@ const AddTask = () => {
         <div className="input-group">
           <label className="label">Description</label>
           <textarea 
-            className="input" 
+            className="input resize-y" 
             rows="4" 
             placeholder="Describe what help you need, any requirements, and what you'll provide..."
-            style={{ resize: 'vertical' }}
           ></textarea>
         </div>
 
         <div className="input-group">
           <label className="label">Location</label>
-          <div style={{ position: 'relative' }}>
-            <MapPin size={18} style={{ position: 'absolute', left: '12px', top: '12px', color: 'var(--color-text-secondary)' }} />
+          <div className="relative">
+            <MapPin size={18} className="absolute left-3 top-3 text-slate-400" />
             <input 
               type="text" 
-              className="input" 
+              className="input pl-10" 
               placeholder="e.g., Downtown Seattle, WA or specific address" 
-              style={{ paddingLeft: '2.5rem' }}
             />
           </div>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           <div className="input-group">
             <label className="label">Start Date</label>
-            <div style={{ position: 'relative' }}>
-              <Calendar size={18} style={{ position: 'absolute', left: '12px', top: '12px', color: 'var(--color-text-secondary)' }} />
+            <div className="relative">
+              <Calendar size={18} className="absolute left-3 top-3 text-slate-400" />
               <input 
                 type="date" 
-                className="input" 
-                style={{ paddingLeft: '2.5rem' }}
+                className="input pl-10" 
               />
             </div>
           </div>
           <div className="input-group">
             <label className="label">Start Time</label>
-            <div style={{ position: 'relative' }}>
-              <Clock size={18} style={{ position: 'absolute', left: '12px', top: '12px', color: 'var(--color-text-secondary)' }} />
+            <div className="relative">
+              <Clock size={18} className="absolute left-3 top-3 text-slate-400" />
               <input 
                 type="time" 
-                className="input" 
-                style={{ paddingLeft: '2.5rem' }}
+                className="input pl-10" 
               />
             </div>
           </div>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           <div className="input-group">
             <label className="label">End Date (Optional)</label>
-            <div style={{ position: 'relative' }}>
-              <Calendar size={18} style={{ position: 'absolute', left: '12px', top: '12px', color: 'var(--color-text-secondary)' }} />
+            <div className="relative">
+              <Calendar size={18} className="absolute left-3 top-3 text-slate-400" />
               <input 
                 type="date" 
-                className="input" 
-                style={{ paddingLeft: '2.5rem' }}
+                className="input pl-10" 
               />
             </div>
           </div>
           <div className="input-group">
             <label className="label">End Time (Optional)</label>
-            <div style={{ position: 'relative' }}>
-              <Clock size={18} style={{ position: 'absolute', left: '12px', top: '12px', color: 'var(--color-text-secondary)' }} />
+            <div className="relative">
+              <Clock size={18} className="absolute left-3 top-3 text-slate-400" />
               <input 
                 type="time" 
-                className="input" 
-                style={{ paddingLeft: '2.5rem' }}
+                className="input pl-10" 
               />
             </div>
           </div>
@@ -123,9 +117,9 @@ const AddTask = () => {
 
         <div className="input-group">
           <label className="label">Category</label>
-          <div style={{ position: 'relative' }}>
-            <Tag size={18} style={{ position: 'absolute', left: '12px', top: '12px', color: 'var(--color-text-secondary)' }} />
-            <select className="input" style={{ paddingLeft: '2.5rem', appearance: 'none' }}>
+          <div className="relative">
+            <Tag size={18} className="absolute left-3 top-3 text-slate-400" />
+            <select className="input pl-10 appearance-none bg-white">
               <option value="" disabled selected>Select a category</option>
               <option value="moving">Moving & Lifting</option>
               <option value="cleaning">Cleaning</option>
@@ -134,57 +128,54 @@ const AddTask = () => {
               <option value="delivery">Delivery</option>
               <option value="other">Other</option>
             </select>
+            <div className="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
+              <svg className="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+              </svg>
+            </div>
           </div>
         </div>
 
         <div className="input-group">
           <label className="label">Task Image (Optional)</label>
           <div 
-            className="upload-area"
             onDragEnter={handleDrag} 
             onDragLeave={handleDrag} 
             onDragOver={handleDrag} 
             onDrop={handleDrop}
-            style={{ 
-              border: `2px dashed ${dragActive ? 'var(--color-primary)' : 'var(--color-gray-200)'}`, 
-              borderRadius: 'var(--radius)', 
-              padding: '2rem', 
-              textAlign: 'center',
-              backgroundColor: dragActive ? 'var(--color-primary-light)' : 'var(--color-gray-50)',
-              transition: 'all 0.2s',
-              cursor: 'pointer',
-              position: 'relative'
-            }}
+            className={`p-8 border-2 border-dashed rounded-radius text-center transition-all duration-200 cursor-pointer relative ${
+              dragActive ? 'border-primary bg-primary-light' : 'border-gray-200 bg-gray-50 hover:bg-gray-100'
+            }`}
           >
             <input 
               type="file" 
               id="file-upload" 
-              style={{ display: 'none' }} 
+              className="hidden" 
               onChange={handleChange}
               accept="image/*"
             />
-            <label htmlFor="file-upload" style={{ cursor: 'pointer', width: '100%', height: '100%', display: 'block' }}>
+            <label htmlFor="file-upload" className="cursor-pointer block">
               {file ? (
-                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', color: 'var(--color-primary-dark)' }}>
+                 <div className="flex items-center justify-center gap-2 text-primary-dark font-medium">
                    <Tag size={20} />
-                   <span style={{ fontWeight: 500 }}>{file.name}</span>
+                   <span>{file.name}</span>
                  </div>
               ) : (
                 <>
-                  <Upload size={32} style={{ color: 'var(--color-text-secondary)', marginBottom: '0.5rem' }} />
-                  <p style={{ fontWeight: 500, color: 'var(--color-text-main)', marginBottom: '0.25rem' }}>
-                    <span style={{ color: 'var(--color-primary)' }}>Upload a file</span> or drag and drop
+                  <Upload size={32} className="text-slate-400 mx-auto mb-2" />
+                  <p className="font-medium text-slate-900 mb-1">
+                    <span className="text-primary hover:underline">Upload a file</span> or drag and drop
                   </p>
-                  <p style={{ fontSize: '0.8rem', color: 'var(--color-text-secondary)' }}>PNG, JPG, GIF up to 10MB</p>
+                  <p className="text-xs text-slate-500">PNG, JPG, GIF up to 10MB</p>
                 </>
               )}
             </label>
           </div>
         </div>
 
-        <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem', marginTop: '2rem' }}>
-          <button className="btn btn-outline" style={{ minWidth: '100px' }}>Cancel</button>
-          <button className="btn btn-primary" style={{ minWidth: '150px' }}>Post Task</button>
+        <div className="flex justify-end gap-4 pt-6 border-t border-gray-100">
+          <button className="btn-outline min-w-[100px]">Cancel</button>
+          <button className="btn-primary min-w-[150px] shadow-md hover:shadow-lg transition-shadow">Post Task</button>
         </div>
 
       </div>

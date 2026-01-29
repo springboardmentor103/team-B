@@ -5,55 +5,42 @@ const Settings = () => {
 
   
   return (
-    <div style={{ maxWidth: '800px', margin: '0 auto', paddingBottom: '3rem' }}>
-      <div style={{ marginBottom: '2rem' }}>
-        <h2 style={{ 
-          fontWeight: '800', fontSize: '2rem',
-          background: 'var(--color-primary-gradient)',
-          WebkitBackgroundClip: 'text',
-          WebkitTextFillColor: 'transparent',
-          marginBottom: '0.5rem'
-        }}>Settings</h2>
-        <p style={{ color: 'var(--color-text-secondary)' }}>Manage your profile and account preferences</p>
+    <div className="max-w-[800px] mx-auto pb-12">
+      <div className="mb-8">
+        <h2 className="font-extrabold text-3xl text-slate-900 mb-2">Settings</h2>
+        <p className="text-slate-500">Manage your profile and account preferences</p>
       </div>
 
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4 }}
-        style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}
+        className="flex flex-col gap-8"
       >
         {/* Profile Picture Section */}
         <section className="card">
-          <h3 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '1.5rem', borderBottom: '1px solid var(--color-gray-100)', paddingBottom: '1rem' }}>Profile Picture</h3>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '2rem' }}>
-             <div style={{ 
-                width: '100px', height: '100px', 
-                backgroundImage: 'url("https://tse3.mm.bing.net/th/id/OIP.eu7kdIVjq5nlCcCyT710vwHaHa?pid=Api&P=0&h=180")',
-                backgroundSize: 'cover',
-                borderRadius: '50%',
-                boxShadow: 'var(--shadow-md)',
-                border: '4px solid var(--color-gray-50)'
-             }}></div>
+          <h3 className="text-xl font-bold mb-6 border-b border-gray-100 pb-4 text-slate-900">Profile Picture</h3>
+          <div className="flex items-center gap-8">
+             <div className="w-[100px] h-[100px] bg-[url('https://tse3.mm.bing.net/th/id/OIP.eu7kdIVjq5nlCcCyT710vwHaHa?pid=Api&P=0&h=180')] bg-cover rounded-full shadow-md border-4 border-gray-50"></div>
              <div>
-               <div style={{ display: 'flex', gap: '1rem', marginBottom: '0.75rem' }}>
-                 <button className="btn btn-primary" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+               <div className="flex gap-4 mb-3">
+                 <button className="btn btn-primary flex items-center gap-2">
                    <Upload size={16} /> Change Photo
                  </button>
-                 <button className="btn-outline" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#ef4444', borderColor: '#fee2e2' }}>
+                 <button className="btn-outline flex items-center gap-2 text-red-500 border-red-100 hover:bg-red-50 hover:border-red-200">
                    <Trash2 size={16} /> Remove
                  </button>
                </div>
-               <p style={{ fontSize: '0.8rem', color: 'var(--color-text-secondary)' }}>JPG, GIF or PNG. Max size 5MB.</p>
+               <p className="text-xs text-slate-500">JPG, GIF or PNG. Max size 5MB.</p>
              </div>
           </div>
         </section>
 
         {/* Personal Information Section */}
         <section className="card">
-          <h3 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '1.5rem', borderBottom: '1px solid var(--color-gray-100)', paddingBottom: '1rem' }}>Personal Information</h3>
+          <h3 className="text-xl font-bold mb-6 border-b border-gray-100 pb-4 text-slate-900">Personal Information</h3>
           
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', marginBottom: '1.5rem' }}>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
             <div className="input-group">
               <label className="label">First Name</label>
               <input type="text" className="input" defaultValue="Prerna" />
@@ -77,54 +64,54 @@ const Settings = () => {
           <div className="input-group">
             <label className="label">Bio (Optional)</label>
             <textarea 
-              className="input" 
+              className="input resize-y" 
               rows="4" 
               defaultValue="Experienced HR Manager dedicated to finding the best talent. Passionate about building great teams and optimizing recruitment processes."
             ></textarea>
-            <p style={{ fontSize: '0.75rem', color: 'var(--color-text-secondary)', marginTop: '0.5rem', textAlign: 'right' }}>Brief description for your profile.</p>
+            <p className="text-[0.75rem] text-slate-500 mt-2 text-right">Brief description for your profile.</p>
           </div>
 
-          <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '1rem' }}>
+          <div className="flex justify-end mt-4">
             <button className="btn btn-primary">
-              <Save size={18} style={{ marginRight: '0.5rem' }} /> Save Changes
+              <Save size={18} className="mr-2" /> Save Changes
             </button>
           </div>
         </section>
 
         {/* Notifications Section */}
         <section className="card">
-          <h3 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '1.5rem', borderBottom: '1px solid var(--color-gray-100)', paddingBottom: '1rem' }}>Notifications</h3>
+          <h3 className="text-xl font-bold mb-6 border-b border-gray-100 pb-4 text-slate-900">Notifications</h3>
           
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-               <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                 <div style={{ padding: '0.5rem', backgroundColor: 'var(--color-primary-light)', borderRadius: '0.5rem', color: 'var(--color-primary)' }}>
+          <div className="flex flex-col gap-6">
+            <div className="flex items-center justify-between">
+               <div className="flex items-center gap-4">
+                 <div className="p-2 bg-primary-light rounded-lg text-primary">
                    <Bell size={20} />
                  </div>
                  <div>
-                   <p style={{ fontWeight: 600 }}>Push Notifications</p>
-                   <p style={{ fontSize: '0.85rem', color: 'var(--color-text-secondary)' }}>Receive notifications about new candidates</p>
+                   <p className="font-semibold text-slate-900">Push Notifications</p>
+                   <p className="text-[0.85rem] text-slate-500">Receive notifications about new candidates</p>
                  </div>
                </div>
-               <label className="switch">
-                 <input type="checkbox" defaultChecked />
-                 <span className="slider"></span>
+               <label className="relative inline-block w-11 h-6 cursor-pointer">
+                 <input type="checkbox" className="sr-only peer" defaultChecked />
+                 <div className="w-11 h-6 bg-slate-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
                </label>
             </div>
 
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-               <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                 <div style={{ padding: '0.5rem', backgroundColor: 'var(--color-gray-100)', borderRadius: '0.5rem', color: 'var(--color-text-secondary)' }}>
+            <div className="flex items-center justify-between">
+               <div className="flex items-center gap-4">
+                 <div className="p-2 bg-gray-100 rounded-lg text-slate-500">
                    <User size={20} />
                  </div>
                  <div>
-                   <p style={{ fontWeight: 600 }}>Email Updates</p>
-                   <p style={{ fontSize: '0.85rem', color: 'var(--color-text-secondary)' }}>Receive daily summaries and alerts</p>
+                   <p className="font-semibold text-slate-900">Email Updates</p>
+                   <p className="text-[0.85rem] text-slate-500">Receive daily summaries and alerts</p>
                  </div>
                </div>
-               <label className="switch">
-                 <input type="checkbox" />
-                 <span className="slider"></span>
+               <label className="relative inline-block w-11 h-6 cursor-pointer">
+                 <input type="checkbox" className="sr-only peer" />
+                 <div className="w-11 h-6 bg-slate-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
                </label>
             </div>
           </div>
@@ -132,14 +119,14 @@ const Settings = () => {
 
         {/* Account Security Section */}
         <section className="card">
-          <h3 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '1.5rem', borderBottom: '1px solid var(--color-gray-100)', paddingBottom: '1rem' }}>Account Security</h3>
+          <h3 className="text-xl font-bold mb-6 border-b border-gray-100 pb-4 text-slate-900">Account Security</h3>
           
           <div className="input-group">
             <label className="label">Current Password</label>
             <input type="password" className="input" placeholder="••••••••" />
           </div>
           
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
              <div className="input-group">
                <label className="label">New Password</label>
                <input type="password" className="input" placeholder="••••••••" />
@@ -150,22 +137,21 @@ const Settings = () => {
              </div>
           </div>
 
-          <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '1rem' }}>
-             <button className="btn-outline">
-               <Lock size={16} style={{ marginRight: '0.5rem' }} /> Change Password
+          <div className="flex justify-end mt-4">
+             <button className="btn-outline px-4 py-2 flex items-center gap-2">
+               <Lock size={16} /> Change Password
              </button>
           </div>
         </section>
 
-
         {/* Session Zone */}
-        <section className="card" style={{ border: '1px solid #fee2e2' }}>
-          <h3 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '1rem', color: '#ef4444' }}>Session</h3>
-          <p style={{ fontSize: '0.9rem', color: 'var(--color-text-secondary)', marginBottom: '1.5rem' }}>
+        <section className="card border border-red-100">
+          <h3 className="text-xl font-bold mb-4 text-red-500">Session</h3>
+          <p className="text-[0.9rem] text-slate-500 mb-6">
             Sign out of your account on this device.
           </p>
-          <button className="btn-outline" style={{ color: '#ef4444', borderColor: '#fee2e2', width: '100%', justifyContent: 'center' }}>
-            <LogOut size={18} style={{ marginRight: '0.5rem' }} /> Logout
+          <button className="btn-outline text-red-500 border-red-100 w-full justify-center py-3 hover:bg-red-50 hover:border-red-200 transition-colors flex items-center gap-2">
+            <LogOut size={18} /> Logout
           </button>
         </section>
       </motion.div>
