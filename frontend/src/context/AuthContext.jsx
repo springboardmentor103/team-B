@@ -1,50 +1,72 @@
-import { createContext, useContext, useState } from "react";
-import { useEffect } from "react";
-import React from "react";
+import { createContext, useContext, useEffect, useState } from "react";
+
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
+  const [token, setToken] = useState(null);
+  const [authReady, setAuthReady] = useState(false);
+  const [user, setUser] = useState(null);
+  // 🔑 SINGLE hydration effect
+  useEffect(() => {
+    const storedToken = localStorage.getItem("token");
+    // const expiry = localStorage.getItem("tokenExpiry");
+    const storedUser = localStorage.getItem("user");
+    // let logoutTimer;
 
-    const [isLoggedIn, setLoggedIn] = useState(!!localStorage.getItem("token"));
-
-
-    const login = (token) => {
-        localStorage.setItem("token", token);
-        setLoggedIn(true);
+    if (storedToken) {
+      setToken(storedToken);
     }
-
-    const logout = () => {
-        localStorage.removeItem("token");
-        localStorage.removeItem("tokenExpiry");
-        setLoggedIn(false);
+    if (storedUser && storedUser !== undefined) {
+      try {
+        setUser(JSON.parse(storedUser));
+      } catch {
+        localStorage.removeItem("user");
+      }
     }
+      // const timeout = Number(expiry) - Date.now();
+      // logoutTimer = setTimeout(() => logout(), timeout);
+    setAuthReady(true);
+    // return () => { logoutTimer && clearTimeout(logoutTimer);};
+ }, []);
 
-    useEffect(() => {
-        const token = localStorage.getItem("token");
-        const expiry = localStorage.getItem("tokenExpiry");
+  const login = (newToken,user, expiry) => {
+    // localStorage.setItem("token", newToken);
+    // // localStorage.setItem("tokenExpiry", expiry);
+    // localStorage.setItem("user", JSON.stringify(user));
+    console.log("LOGIN CALLED", newToken, user);
 
-        if (!token || !expiry) {
-            setLoggedIn(false);
-            return;
-        }
+  localStorage.setItem("token", newToken);
+  localStorage.setItem("user", JSON.stringify(user));
 
-        const now = new Date().getTime();
-        if (now > expiry) {
-            logout();
-        } else {
-            setLoggedIn(true);
-            const timeout = expiry - now;
-            const timer = setTimeout(() => logout(), timeout);
-            return () => clearTimeout(timer); // cleanup
-        }
-    }, []);
+  console.log("LS USER AFTER SET:", localStorage.getItem("user"));
 
+    setToken(newToken); 
+    setUser(user);
+  };
 
-    return (
-        <AuthContext.Provider value={{ isLoggedIn, login, logout }}>
-            {children}
-        </AuthContext.Provider>
-    )
-}
+  const logout = () => {
+    // localStorage.removeItem("token");
+    // localStorage.removeItem("tokenExpiry");
+    localStorage.clear();
+    setToken(null);
+    setUser(null);
+  };
+
+  return (
+    <AuthContext.Provider
+      value={{
+        token,
+        user,
+        isLoggedIn: !!token,
+        isVerified: user?.isVerified ?? false,
+        login,
+        logout,
+        authReady,
+      }}
+    >
+      {children}
+    </AuthContext.Provider>
+  );
+};
 
 export const useAuth = () => useContext(AuthContext);

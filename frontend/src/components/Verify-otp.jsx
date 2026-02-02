@@ -3,6 +3,8 @@ import axios from "axios";
 import { useLoading } from '../context/LoadingContext';
 import Loader from "./Loader";
 import { useNavigate } from "react-router";
+import api from "../api/api";
+
 
 export default function Verifyotp() {
     const [otp, setOtp] = useState("");
@@ -29,16 +31,14 @@ export default function Verifyotp() {
         if (!validate()) return;
         try {
             setLoading(true);
-            const response = await axios.post("http://localhost:4000/verify-otp", { email, otp });
+            const response = await api.post("/verify-otp", { email, otp });
 
             console.log(response.data);
 
             localStorage.setItem("verified", response.data.verified);
 
-            setTimeout(() => {
                 setLoading(false);
                 navigate("/login");
-            }, 5000);
         }
         catch (error) {
             setErrors({ otp: "Invalid OTP or Email" });

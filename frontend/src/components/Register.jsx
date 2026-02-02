@@ -6,7 +6,7 @@ import { NavLink } from "react-router-dom";
 
 export default function Register() {
 
-    const [username, setUsername] = useState("");
+    const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [passwordConfirm, setPasswordConfirm] = useState("");
@@ -16,7 +16,7 @@ export default function Register() {
 
     const validate = () => {
         const newErrors = {};
-        if(!username.trim()) newErrors.username = "Username is required";
+        if(!name.trim()) newErrors.username = "Username is required";
 
         if(!email.trim()) newErrors.email = "Email is required";
         else if(!/\S+@\S+\.\S+/.test(email)) newErrors.email = "Email is invalid";
@@ -42,7 +42,7 @@ export default function Register() {
 
         try {
             setLoading(true);
-            const det = await axios.post("http://localhost:4000/register", { username, email, password });
+            const det = await axios.post("http://localhost:4000/register", { name, email, password });
             console.log(det.data);
             navigate("/verify-otp", { state: { email } });
         }
@@ -64,7 +64,7 @@ export default function Register() {
                         <input
                             type="text"
                             id="username"
-                            onChange = {e => {setUsername(e.target.value); setErrors(prev => ({...prev, username: ""}))}}
+                            onChange = {e => {setName(e.target.value); setErrors(prev => ({...prev, username: ""}))}}
                             className="w-full px-3 py-2 border rounded focus:outline-none focus:ring focus:border-blue-300"
                             placeholder="Enter your username"
                         />

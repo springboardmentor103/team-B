@@ -5,6 +5,7 @@ import {useLoading} from "../context/LoadingContext";
 import Loader from "./Loader";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import api from "../api/api";
 
 export default function Login() {
 
@@ -17,7 +18,7 @@ export default function Login() {
     const[errors, setErrors] = useState({});
 
     const navigate = useNavigate();
-    const { login } = useAuth();
+    const { login, isVerified } = useAuth();
 
     const validate = () => {
         const newErrors ={};
@@ -40,14 +41,14 @@ export default function Login() {
 
         try {
             setLoading(true);
-            const response = await axios.post("http://localhost:4000/login", { email, password });
+            const response = await api.post("login", { email, password });
 
             console.log(response.data);
 
             // localStorage.setItem("token", response.data.token);
             const expiryTime = new Date().getTime() + 60 * 60 * 1000; // 1 hour
             localStorage.setItem("tokenExpiry", expiryTime);
-            login(response.data.token);
+            login(response.data.token, response.data.user);
 
             navigate("/dashboard");
         } catch (error) {
@@ -58,9 +59,6 @@ export default function Login() {
             if (error.response && error.response.status === 401) {
                 setErrors(prev => ({...prev, password: "Incorrect password"}));
             }
-
-            
-
             console.error("Login failed:", error);
         }
         finally {
@@ -68,10 +66,9 @@ export default function Login() {
         }
     }
     return (
-        <>
+        <div className="relative min-h-screen bg-gradient-to-br from-red-100 to-blue-200 flex items-center justify-center">
             {loading && <Loader />}
-        <div className="flex justify-center items-center h-screen bg-gray-100">
-            <div className="bg-white p-8 rounded shadow-md w-full max-w-md">
+            <div className="bg-white p-8 rounded-xl shadow-lg w-full max-w-md">
                 <h2 className="text-2xl font-bold mb-6 text-center">Login to Your Account</h2>
                 <form onSubmit={handleSubmit}>
                     <div className="mb-4">
@@ -112,6 +109,7 @@ export default function Login() {
                 </form>
             </div>
         </div>
-        </>
+        
+  
     );
 }

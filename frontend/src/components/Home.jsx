@@ -154,5 +154,7 @@
 import React from "react";
 export default function Home() {
 
-  return <div>Home Component</div>;
+  return <div className="feed-page">
+    <p className="text-2xl font-bold">HireHelper</p>
+    </div>;
 }

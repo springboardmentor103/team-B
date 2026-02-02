@@ -10,7 +10,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@headlessui/react": "^2.2.9",
     "axios": "^1.13.2",
+    "framer-motion": "^12.29.0",
+    "lucide-react": "^0.563.0",
     "react": "^19.2.0",
     "react-calendar": "^6.0.0",
     "react-dom": "^19.2.0",
