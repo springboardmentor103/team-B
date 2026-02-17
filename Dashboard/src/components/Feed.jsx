@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Search, MapPin, Clock, CheckCircle2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import ConfirmationModal from './ConfirmationModal';
 
 
 
@@ -86,6 +87,28 @@ const Feed = () => {
     }
   ]);
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedTask, setSelectedTask] = useState(null);
+
+  const handleRequestClick = (task) => {
+    if (task.requestSent) {
+      // If already sent, toggle off immediately (or show another modal if needed, but keeping simple for now)
+      toggleRequest(task.id);
+    } else {
+      // If not sent, open confirmation modal
+      setSelectedTask(task);
+      setIsModalOpen(true);
+    }
+  };
+
+  const confirmRequest = () => {
+    if (selectedTask) {
+      toggleRequest(selectedTask.id);
+      setIsModalOpen(false);
+      setSelectedTask(null);
+    }
+  };
+
   const toggleRequest = (id) => {
     setItems(items.map(item => 
       item.id === id ? { ...item, requestSent: !item.requestSent } : item
@@ -151,7 +174,7 @@ const Feed = () => {
                   </div>
                   
                   <button 
-                    onClick={() => toggleRequest(item.id)}
+                    onClick={() => handleRequestClick(item)}
                     className={`px-4 py-2 text-[0.75rem] font-black uppercase tracking-widest transition-all duration-300 rounded-xl border-none cursor-pointer shadow-md active:scale-95 flex items-center gap-2 ${
                       item.requestSent 
                         ? 'bg-green-100 text-green-700 hover:bg-green-200 shadow-none' 
@@ -171,6 +194,14 @@ const Feed = () => {
           ))}
         </AnimatePresence>
       </div>
+
+      <ConfirmationModal 
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onConfirm={confirmRequest}
+        title="Confirm Request"
+        message={`Are you sure you want to request to join "${selectedTask?.title}"? The task owner will be notified.`}
+      />
     </div>
   );
 };
